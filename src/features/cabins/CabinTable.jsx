@@ -4,6 +4,7 @@ import CabinRow from "./CabinRow";
 import { useCabin } from "./useCabin";
 import Table from "../../ui/Table";
 import { useSearchParams } from "react-router-dom";
+import Empty from "../../ui/Empty";
 
 const TableHeader = styled.header`
   display: grid;
@@ -24,34 +25,35 @@ function CabinTable() {
   const [searchParams] = useSearchParams();
 
   if (isLoading) return <Spinner />;
-
+  
+  
   // ---------------- FILTER ----------------
-
+  
   const filterValue = searchParams.get("discount") || "all";
 
   let filteredCabins;
-
+  
   if (filterValue === "all") {
     filteredCabins = cabins;
   }
-
+  
   if (filterValue === "no-discount") {
     filteredCabins = cabins.filter((cabin) => cabin.discount === 0);
   }
-
+  
   if (filterValue === "with-discount") {
     filteredCabins = cabins.filter((cabin) => cabin.discount > 0);
   }
-
+  
   // ---------------- SORT ----------------
-
-  const sortBy = searchParams.get("sortBy") || 'none';
-
+  
+  const sortBy = searchParams.get("sortBy") || "none";
+  
   const sortedCabins = [...filteredCabins].sort((a, b) => {
     switch (sortBy) {
       case "sort-by-latest":
         return new Date(b.created_at) - new Date(a.created_at);
-
+        
       case "sort-by-name-asc":
         return a.name.localeCompare(b.name);
 
@@ -61,13 +63,16 @@ function CabinTable() {
       case "sort-by-capacity-asc":
         return a.maxCapacity - b.maxCapacity;
 
-      default:
-        return 0;
-    }
-  });
-
+        default:
+          return 0;
+        }
+      });
+      
   // ---------------- RENDER ----------------
-
+  
+  if (!cabins.length || !filteredCabins.length)
+    return <Empty resourceName="cabins" />;
+  
   return (
     <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
       <Table.Header role="row">
