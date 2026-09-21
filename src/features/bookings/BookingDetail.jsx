@@ -12,6 +12,12 @@ import { useMoveBack } from "../../hooks/useMoveBack";
 import { useBooking } from "./useBooking";
 import Spinner from "../../ui/Spinner";
 import { useNavigate } from "react-router-dom";
+import { HiArrowUpOnSquare, HiTrash } from "react-icons/hi2";
+import { useCheckout } from "../check-in-out/useCheckout";
+import { useDeleteBooking } from "./useDeleteBooking";
+import { useState } from "react";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -24,8 +30,11 @@ function BookingDetail() {
   // const status = "checked-in";
 
   const navigate = useNavigate();
-
   const moveBack = useMoveBack();
+
+  const { checkout, isCheckingOut } = useCheckout();
+  const { isDeleting, deleteBooking } = useDeleteBooking();
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   if (isLoading) return <Spinner />;
 
@@ -54,10 +63,37 @@ function BookingDetail() {
             Check in
           </Button>
         )}
-        <Button variation="secondary" onClick={moveBack}>
-          Back
-        </Button>
+
+        {status === "checked-in" && (
+          <Button
+            icon={<HiArrowUpOnSquare />}
+            onClick={() => checkout(bookingId)}
+            disabled={isCheckingOut}
+          >
+            {isCheckingOut ? "Cheacking out..." : "Check out"}
+          </Button>
+        )}
+        {status === "unconfirmed" && (
+          <Button color="red" onClick={() => setIsDeleteOpen(true)}>
+            Delete
+          </Button>
+        )}
       </ButtonGroup>
+      {isDeleteOpen && (
+        <Modal onClose={() => setIsDeleteOpen(false)}>
+          <ConfirmDelete
+            resourceName={bookingId}
+            deletedItem="booking"
+            disabled={isDeleting}
+            onConfirm={() => {
+              deleteBooking(bookingId);
+            }}
+            onCloseModal={() => setIsDeleteOpen(false)
+              
+            }
+          />
+        </Modal>
+      )}
     </>
   );
 }

@@ -6,9 +6,12 @@ import Spinner from "../../ui/Spinner";
 import Pagination from "../../ui/Pagination";
 
 import { useBooking } from "./useBookings";
+import { useState } from "react";
 
 function BookingTable() {
-  const { bookings, isLoading, count } = useBooking();
+  const [pageSize, setPageSize] = useState(5);
+
+  const { bookings, isLoading, count } = useBooking(pageSize);
   if (isLoading) return <Spinner />;
 
   if (!bookings.length) return <Empty resourceName="bookings" />;
@@ -32,7 +35,11 @@ function BookingTable() {
           )}
         />
         <Table.Footer>
-          <Pagination count={count} />
+          <Pagination
+            count={count}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+          />
         </Table.Footer>
       </Table>
     </Menus>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 // import Heading from "../ui/Heading";
 // import Row from "../ui/Row";
 import { getCabins } from "../services/apiCabins";

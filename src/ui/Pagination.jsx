@@ -1,13 +1,19 @@
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { PAGE_SIZE } from "../utils/constants";
+import { useState } from "react";
 
 const StyledPagination = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const LeftSide = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
 `;
 
 const P = styled.p`
@@ -59,20 +65,44 @@ const PaginationButton = styled.button`
   }
 `;
 
+const Select = styled.select`
+  border: 1px solid var(--color-grey-200);
+  background-color: var(--color-grey-0);
+  color: var(--color-grey-700);
+  border-radius: var(--border-radius-sm);
+  padding: 0.6rem 3.2rem 0.6rem 1rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
 
+  &:hover {
+    border-color: var(--color-brand-600);
+  }
 
-function Pagination({ count }) {
+  &:focus {
+    border-color: var(--color-brand-600);
+    box-shadow: 0 0 0 2px var(--color-brand-100);
+  }
+
+  option {
+    background-color: var(--color-grey-0);
+    color: var(--color-grey-700);
+  }
+`;
+
+function Pagination({ count, pageSize, setPageSize }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = !searchParams.get("page")
     ? 1
     : Number(searchParams.get("page"));
 
-  const PageCount = Math.ceil(count / PAGE_SIZE);
+  const PageCount = Math.ceil(count / pageSize);
 
   //? Calculate which bookings are currently shown
-  const from = (currentPage - 1) * PAGE_SIZE + 1;
-  const to = Math.min(currentPage * PAGE_SIZE, count);
-  
+  const from = (currentPage - 1) * pageSize + 1;
+  const to = Math.min(currentPage * pageSize, count);
+
   function nextPage() {
     const next = currentPage === PageCount ? currentPage : currentPage + 1;
     searchParams.set("page", next);
@@ -86,14 +116,27 @@ function Pagination({ count }) {
 
   return (
     <StyledPagination>
-      <p>
-        Showing <strong>{from}</strong> to <strong>{to}</strong> of <strong>{count}</strong>
-      </p>
+      <LeftSide>
+        <p>
+          Showing <strong>{from}</strong> to <strong>{to}</strong> of{" "}
+          <strong>{count}</strong>
+        </p>
+
+        <Select
+          value={pageSize}
+          onChange={(e) => setPageSize(Number(e.target.value))}
+        >
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={15}>15</option>
+        </Select>
+      </LeftSide>
 
       <Buttons>
         <PaginationButton onClick={prevPage} disabled={currentPage === 1}>
           <HiChevronLeft /> <span>Prev</span>
         </PaginationButton>
+
         <PaginationButton
           onClick={nextPage}
           disabled={currentPage === PageCount}

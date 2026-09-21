@@ -1,14 +1,6 @@
-import {
-  HiOutlineCalendar,
-  HiOutlineHome,
-  HiOutlineUser,
-  HiOutlineUsers,
-} from "react-icons/hi";
-import {
-  HiOutlineCog6Tooth,
-  HiOutlineCog8Tooth,
-  HiOutlineHomeModern,
-} from "react-icons/hi2";
+import { HiOutlineCalendar, HiOutlineHome, HiUserGroup } from "react-icons/hi";
+import { HiOutlineCog6Tooth, HiOutlineHomeModern } from "react-icons/hi2";
+import { RiAdminLine } from "react-icons/ri";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
@@ -83,8 +75,15 @@ function MainNav() {
         </li>
 
         <li>
+          <StyledNavLink to="/guests">
+            <HiUserGroup />
+            <span>Guests</span>
+          </StyledNavLink>
+        </li>
+
+        <li>
           <StyledNavLink to="/users">
-            <HiOutlineUsers />
+            <RiAdminLine />
             <span>Users</span>
           </StyledNavLink>
         </li>

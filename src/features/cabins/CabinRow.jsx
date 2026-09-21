@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
-import Button from "../../ui/Button";
 import { useState } from "react";
 import EditCabinForm from "./EditCabinForm";
 import Modal from "../../ui/Modal";
@@ -117,7 +116,7 @@ function CabinRow({ cabin }) {
               Edit
             </Menus.Button>
             <Menus.Button
-              icon={<HiTrash color="var(--color-red-700)"/>}
+              icon={<HiTrash color="var(--color-red-700)" />}
               color={{
                 color: "var(--color-red-700)",
               }}
@@ -128,7 +127,7 @@ function CabinRow({ cabin }) {
           </Menus.List>
         </Menus.Menu>
       </Menus>
-      
+
       {isEditOpen && (
         <Modal onClose={() => setIsEditOpen(false)}>
           <EditCabinForm cabin={cabin} onClose={() => setIsEditOpen(false)} />
@@ -138,6 +137,7 @@ function CabinRow({ cabin }) {
         <Modal onClose={() => setIsDeleteOpen(false)}>
           <ConfirmDelete
             resourceName={name}
+            deletedItem="cabin"
             disabled={isDeleting}
             onConfirm={() => {
               deleteCabin(cabinId);
