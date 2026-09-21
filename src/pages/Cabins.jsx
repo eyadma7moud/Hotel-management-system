@@ -9,9 +9,9 @@ import AddCabin from "../features/cabins/AddCabin";
 import CabinTableOperations from "../features/cabins/CabinTableOperations";
 
 function Cabins() {
-  useEffect(function () {
-    getCabins().then((data) => console.log(data));
-  });
+  // useEffect(function () {
+  //   getCabins().then((data) => console.log(data));
+  // });
 
   return (
     <>
