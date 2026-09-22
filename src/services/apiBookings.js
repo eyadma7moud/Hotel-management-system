@@ -5,7 +5,7 @@ export async function getBookings({ filter, sortBy, page, pageSize }) {
   let query = supabase
     .from("bookings")
     .select(
-      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)",
+      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, guestId, cabinId, cabins(id, name), guests(id, fullName, email)",
       { count: "exact" },
     );
 
@@ -130,25 +130,21 @@ export async function getStaysTodayActivity() {
   return data;
 }
 
-// export async function createBooking(booking, id) {
-//   let query = supabase.from("bookings");
+// CREATE BOOKING
+export async function createBooking(newBooking) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .insert([newBooking])
+    .select()
+    .single();
 
-//   if (!id) {
-//     query = query.insert([{ ...booking }]);
-//   }
-//   if (id) {
-//     query = query.update({ ...booking }).eq("id", id);
-//   }
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be created");
+  }
 
-//   const { data, error } = await supabase.select().single();
-
-//   if (error) {
-//     console.error(error);
-//     throw new Error("Booking could not be created");
-//   }
-
-//   return data;
-// }
+  return data;
+}
 
 export async function updateBooking(id, obj) {
   const { data, error } = await supabase

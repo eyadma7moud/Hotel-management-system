@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useUser } from "./useUser";
+import { HiMiniKey } from "react-icons/hi2";
 
 const StyledUserAvatar = styled.div`
   display: flex;
@@ -20,13 +21,35 @@ const Avatar = styled.img`
   border-radius: 50%;
   outline: 2px solid var(--color-grey-100);
 `;
+
+const AdminBadge = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+
+  font-size: 1.1rem;
+  font-weight: 600;
+
+  color: var(--color-brand-700);
+  background-color: var(--color-brand-100);
+`;
+
 function UserAvatar() {
   const { user } = useUser();
-  const { fullName, avatar } = user.user_metadata;
+  const { fullName, avatar, role } = user.user_metadata;
   return (
     <StyledUserAvatar>
       <Avatar src={avatar || "default-user.jpg"} alt={fullName} />
       <span>{fullName}</span>
+      {role === "admin" && (
+        <AdminBadge>
+          <HiMiniKey />
+          Admin
+        </AdminBadge>
+      )}{" "}
     </StyledUserAvatar>
   );
 }

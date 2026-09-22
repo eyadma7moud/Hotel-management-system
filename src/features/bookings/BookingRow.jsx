@@ -8,9 +8,10 @@ import Menus from "../../ui/Menus";
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 import {
-  HiArrowDownOnSquare,
-  HiArrowUpOnSquare,
+  // HiArrowDownOnSquare,
+  // HiArrowUpOnSquare,
   HiEye,
+  HiPencil,
   HiTrash,
 } from "react-icons/hi2";
 
@@ -20,7 +21,7 @@ import { useDeleteBooking } from "./useDeleteBooking";
 import { useState } from "react";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Modal from "../../ui/Modal";
-import { deleteBooking } from "../../services/apiBookings";
+import EditBookingForm from "./EditBookingForm";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -49,8 +50,8 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-function BookingRow({
-  booking: {
+function BookingRow({ booking }) {
+  const {
     id: bookingId,
     created_at,
     startDate,
@@ -59,16 +60,17 @@ function BookingRow({
     numGuests,
     totalPrice,
     status,
-    guests: { fullName: guestName, email },
-    cabins: { name: cabinName },
-  },
-}) {
+    guests: { id: guestId, fullName: guestName, email },
+    cabins: { id: cabinId, name: cabinName },
+  } = booking;
+
   const navigate = useNavigate();
   const { checkout, isCheckingOut } = useCheckout();
 
   const { isDeleting, deleteBooking } = useDeleteBooking();
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const statusToTagName = {
     unconfirmed: "blue",
@@ -112,7 +114,7 @@ function BookingRow({
             >
               Details
             </Menus.Button>
-            {status === "unconfirmed" && (
+            {/* {status === "unconfirmed" && (
               <Menus.Button
                 icon={<HiArrowDownOnSquare />}
                 onClick={() => navigate(`/checkin/${bookingId}`)}
@@ -127,6 +129,14 @@ function BookingRow({
                 disabled={isCheckingOut}
               >
                 Check out
+              </Menus.Button>
+            )} */}
+            {status === "unconfirmed" && (
+              <Menus.Button
+                icon={<HiPencil />}
+                onClick={() => setIsEditOpen(true)}
+              >
+                Edit
               </Menus.Button>
             )}
             {status === "unconfirmed" && (
@@ -153,6 +163,14 @@ function BookingRow({
               deleteBooking(bookingId);
             }}
             onCloseModal={() => setIsDeleteOpen(false)}
+          />
+        </Modal>
+      )}
+      {isEditOpen && (
+        <Modal onClose={() => setIsEditOpen(false)}>
+          <EditBookingForm
+            booking={booking}
+            onClose={() => setIsEditOpen(false)}
           />
         </Modal>
       )}
