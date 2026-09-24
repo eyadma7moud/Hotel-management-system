@@ -89,6 +89,9 @@ const SummaryBox = styled.div`
 
 function CreateBookingForm({ onClose }) {
   const { settings, isLoading } = useSettings();
+  const { createBookingMutation, isCreating } = useCreateBooking();
+  const { guests, isLoading: isLoadingGuests } = useGuests();
+  const { cabins, isLoading: isLoadingCabins } = useCabinsForBooking();
 
   const { register, handleSubmit, watch, formState } = useForm({
     defaultValues: {
@@ -101,13 +104,9 @@ function CreateBookingForm({ onClose }) {
 
   if (isLoading) return <Spinner />;
 
-  const { breakfastPrice } = settings;
-  
-  const { errors } = formState;
+  const { breakfastPrice, minBookingLength, maxBookingLength } = settings;
 
-  const { createBookingMutation, isCreating } = useCreateBooking();
-  const { guests, isLoading: isLoadingGuests } = useGuests();
-  const { cabins, isLoading: isLoadingCabins } = useCabinsForBooking();
+  const { errors } = formState;
 
   const startDate = watch("startDate");
   const endDate = watch("endDate");
@@ -212,10 +211,28 @@ function CreateBookingForm({ onClose }) {
           disabled={isWorking}
           {...register("endDate", {
             required: "This field is required",
-            validate: (value) =>
-              !startDate ||
-              new Date(value) > new Date(startDate) ||
-              "End date must be after start date",
+            validate: (value) => {
+              if (!startDate) return true;
+
+              const nights = differenceInCalendarDays(
+                new Date(value),
+                new Date(startDate),
+              );
+
+              if (nights <= 0) return "End date must be after start date";
+
+              if (nights < minBookingLength)
+                return `Minimum booking length is ${minBookingLength} night${
+                  minBookingLength > 1 ? "s" : ""
+                }`;
+
+              if (nights > maxBookingLength)
+                return `Maximum booking length is ${maxBookingLength} night${
+                  maxBookingLength > 1 ? "s" : ""
+                }`;
+
+              return true;
+            },
           })}
         />
       </StyledFormRow>

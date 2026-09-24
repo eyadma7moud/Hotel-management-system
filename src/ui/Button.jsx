@@ -55,16 +55,21 @@ const Button = styled.button`
   border: none;
   border-radius: var(--border-radius-sm);
   background-color: ${(props) =>
-    props.color === "red" ? "var(--color-red-700)" : "var(--color-brand-600)"};
+    props.variation === "danger"
+      ? "var(--color-red-700)"
+      : "var(--color-brand-600)"};
   color: var(--color-brand-50);
   box-shadow: var(--shadow-sm);
   cursor: pointer;
 
+  ${(props) => sizes[props.size]}
+
   &:hover {
     background-color: ${(props) =>
-      props.color === "red"
+      props.variation === "danger"
         ? "var(--color-red-800)"
         : "var(--color-brand-700)"};
   }
 `;
+
 export default Button;
