@@ -12,8 +12,9 @@ function BookingTable() {
   const [pageSize, setPageSize] = useState(5);
 
   const { bookings, isLoading, count } = useBooking(pageSize);
-  if (isLoading) return <Spinner />;
 
+  if (isLoading) return <Spinner />;
+  
   if (!bookings.length) return <Empty resourceName="bookings" />;
 
   return (

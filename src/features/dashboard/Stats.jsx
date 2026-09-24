@@ -11,12 +11,6 @@ function Stats({ bookings, confirmedStays, numDays, cabinCount }) {
     confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0) /
     (numDays * cabinCount);
 
-  console.log({
-    numDays,
-    cabinCount,
-    confirmedStays,
-    nights: confirmedStays.map((stay) => stay.numNights),
-  });
   return (
     <>
       <Stat

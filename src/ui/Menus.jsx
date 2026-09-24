@@ -40,7 +40,6 @@ const StyledList = styled.ul`
   top: ${(props) => props.position.y}px;
 `;
 
-
 const StyledButton = styled.button`
   width: 100%;
   text-align: left;
@@ -53,8 +52,7 @@ const StyledButton = styled.button`
   align-items: center;
   gap: 1.6rem;
 
-  background-color: ${(props) =>
-    props.color?.backgroundColor || "transparent"};
+  background-color: ${(props) => props.color?.backgroundColor || "transparent"};
 
   color: ${(props) => props.color?.color || "inherit"};
 
@@ -97,6 +95,7 @@ function Toggle({ id }) {
   const { openId, open, close, setPosition } = useContext(MenusContext);
 
   function handleClick(e) {
+    e.stopPropagation();
     const rect = e.currentTarget.getBoundingClientRect();
 
     setPosition({
@@ -116,7 +115,7 @@ function Toggle({ id }) {
 
 function List({ id, children }) {
   const { openId, position, close } = useContext(MenusContext);
-  const ref = useOutsideClick(close);
+  const ref = useOutsideClick(close, false);
 
   if (openId !== id) return null;
 
