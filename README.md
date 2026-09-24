@@ -2,6 +2,14 @@
 
 An internal web application for hotel employees to manage cabins, bookings, guests, and check-in/check-out operations, with a real-time dashboard and dark mode support.
 
+🔗 **Live Demo:** [wildoasis-hotel.vercel.app](https://wildoasis-hotel.vercel.app/)
+
+**Demo Credentials:**
+| Role  | Email | Password |
+|-------|-------|----------|
+| Admin | admin@admin.com | 00000000 |
+| User  | user@user.com | 00000000 |
+
 ## 🏨 Overview
 
 This app is built for **hotel staff only** — it is not a public-facing booking site. Employees log in to manage the day-to-day operations of the hotel: cabins, bookings, guests, and check-ins/check-outs, with an admin role for user and settings management.
@@ -93,52 +101,3 @@ src/
 ```
 
 Each `features/<name>` folder follows the same pattern: a `use<Resource>.js` hook per operation (fetch/create/edit/delete), paired with the corresponding form/row/table components.
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js (v18+ recommended)
-- A [Supabase](https://supabase.com) project (URL + public anon key)
-
-### Installation
-
-```bash
-git clone <repo-url>
-cd <project-folder>
-npm install
-```
-
-### Environment Variables
-
-Create a `.env.local` file in the project root:
-
-```env
-VITE_SUPABASE_URL=your-supabase-project-url
-VITE_SUPABASE_KEY=your-supabase-anon-key
-```
-
-### Run locally
-
-```bash
-npm run dev
-```
-
-### Build for production
-
-```bash
-npm run build
-```
-
-## 🗄️ Supabase Setup
-
-You'll need the following tables in your Supabase project:
-- `cabins` — name, capacity, price, discount, image, description
-- `bookings` — startDate, endDate, numNights, numGuests, cabinPrice, extrasPrice, totalPrice, status, hasBreakfast, isPaid, observations, cabinId, guestId
-- `guests` — fullName, email, nationalID, nationality, countryFlag
-- `settings` — minBookingLength, maxBookingLength, maxGuestsPerBooking, breakfastPrice
-
-Set up Supabase Storage buckets for **cabin images** and **avatars**, and enable Row Level Security policies as appropriate for authenticated staff access.
-
-## 📄 License
-
-This project is for internal/educational use. Add a license here if needed.
